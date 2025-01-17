@@ -42,7 +42,8 @@ Vagrant.configure("2") do |config|
   
   ### Tomcat Application Server VM (app01) ###
   config.vm.define "app01" do |app01|
-    app01.vm.box = "eurolinux-vagrant/centos-stream-9"
+    app01.vm.box = "ubuntu/jammy64"  # Use Ubuntu 22.04 (Jammy Jellyfish)
+    # app01.vm.box = "eurolinux-vagrant/centos-stream-9"
     # app01.vm.box_version = "9.0.43"
     app01.vm.box_version = "0"
     app01.vm.hostname = "app01"
