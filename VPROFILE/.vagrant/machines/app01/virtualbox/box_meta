@@ -1,1 +1,1 @@
-{"name":"ubuntu/jammy64","version":"0","provider":"virtualbox","directory":"boxes/ubuntu-VAGRANTSLASH-jammy64/0/virtualbox"}
+{"name":"eurolinux-vagrant/centos-stream-9","version":"9.0.43","provider":"virtualbox","directory":"boxes/eurolinux-vagrant-VAGRANTSLASH-centos-stream-9/9.0.43/virtualbox"}

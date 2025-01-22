@@ -1,1 +1,1 @@
-{"virtualbox":{"/vagrant":{"guestpath":"/vagrant","hostpath":"/home/hosa/Desktop/PROGRAMMING/DEVOPS_PROJECTS/VPROFILE","disabled":false,"__vagrantfile":true}}}
+{"rsync":{"/vagrant":{"type":"rsync","guestpath":"/vagrant","hostpath":"/home/hosa/Desktop/PROGRAMMING/DEVOPS_PROJECTS/VPROFILE","disabled":false,"__vagrantfile":true,"owner":"vagrant","group":"vagrant"}}}
