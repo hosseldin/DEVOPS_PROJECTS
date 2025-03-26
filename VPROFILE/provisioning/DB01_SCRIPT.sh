@@ -19,10 +19,15 @@ log "==== DB01 Setup Script Started ===="
 
 # Update system and install required packages
 log "Updating system packages..."
-sudo yum update -y
+# sudo yum update -y
 
 log "Installing EPEL release..."
 sudo yum install epel-release -y
+
+log "Installing packages for shared folders..."
+sudo yum install kernel-devel kernel-headers gcc make perl dkms  -y
+sudo mount /dev/sr0 /mnt
+sudo /mnt/VBoxLinuxAdditions.run
 
 log "Installing Git and MariaDB..."
 sudo yum install git mariadb-server -y
