@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Define log file relative to the script
-LOG_FILE="../logs/db01_log.log"
+LOG_FILE="/vagrant/logs/db01_log.log"
 
 # Ensure the Logs directory exists
 mkdir -p "$(dirname "$LOG_FILE")"
