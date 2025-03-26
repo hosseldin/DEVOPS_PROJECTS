@@ -11,20 +11,21 @@ sudo yum install git mariadb-server -y
 sudo systemctl start mariadb
 sudo systemctl enable mariadb
 
-# Set root password and automate mysql_secure_installation
+
+# Set root password to automate mysql_secure_installation
 MYSQL_ROOT_PASSWORD="admin123"
 
+# This is the sequence of prompts
+# That will happen when u run "mysql_secure_installation"
 printf "%s\n" \
   "Y" \
   "$MYSQL_ROOT_PASSWORD" \
   "$MYSQL_ROOT_PASSWORD" \
   "Y" \
   "n" \
-  "$MYSQL_ROOT_PASSWORD" \
-  "Y" \
-  "Y" \
   "Y" \
   "Y" | sudo mysql_secure_installation
+
 
 
 echo "Setup complete!" > /home/vagrant/setup_done.txt
