@@ -98,3 +98,26 @@ sudo systemctl restart mariadb
 
 
 log "==== MYSQL Setup Script Completed ===="
+
+
+
+
+    # db01.vm.provision "shell", inline: <<-SHELL
+    #   echo "Installing dependencies..."
+    #   sudo yum install epel-release -y
+    #   sudo yum install -y  kernel-headers gcc make perl bzip2
+
+    #   echo "Mounting Guest Additions ISO..."
+    #   sudo mount /dev/cdrom /mnt || echo "No /dev/cdrom found, skipping..."
+      
+    #   if [ -f /mnt/VBoxLinuxAdditions.run ]; then
+    #       echo "Installing VirtualBox Guest Additions..."
+    #       sudo /mnt/VBoxLinuxAdditions.run --nox11 || echo "Guest Additions installation failed!"
+    #   else
+    #       echo "Guest Additions ISO not found! Manual installation might be required."
+    #   fi
+
+    #   echo "Cleaning up..."
+    #   sudo umount /mnt || echo "Nothing to unmount"
+    #   sudo systemctl restart vboxadd || echo "vboxadd service not found"
+    # SHELL
