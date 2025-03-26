@@ -49,7 +49,7 @@ printf "%s\n" \
 
 # Run SQL commands from an external file
 log "Running database setup from DB01_SQL.sql..."
-mysql -u root -p"$MYSQL_ROOT_PASSWORD" < DB01_SQL.sql
+mysql -u root -p"$MYSQL_ROOT_PASSWORD" < /vagrant/provisioning/DB01_SQL.sql
 
 log "Cloning the VProfile project from GitHub"
 git clone -b main https://github.com/hkhcoder/vprofile-project.git
