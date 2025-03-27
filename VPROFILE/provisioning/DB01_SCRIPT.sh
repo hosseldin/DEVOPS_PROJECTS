@@ -8,14 +8,17 @@ mkdir -p "$(dirname "$LOG_FILE")"
 
 # Function for logging messages with timestamp
 log() {
-    echo "$(date '+%Y-%m-%d %H:%M:%S') - $1" | tee -a "$LOG_FILE"
+    echo "$(date '+%Y-%m-%d %H:%M:%S') - $1"
+    # echo "$(date '+%Y-%m-%d %H:%M:%S') - $1" | tee -a "$LOG_FILE"
 }
 
 # Redirect all output and errors to the log file as well
 exec > >(tee -a "$LOG_FILE") 2>&1
-
-
+mysql
 log "==== DB01 Setup Script Started ===="
+
+log "==== Sets the correct timezone for the VM ===="
+sudo timedatectl set-timezone Africa/Cairo
 
 # Update system and install required packages
 log "Updating system packages..."
@@ -39,14 +42,22 @@ sudo systemctl start mariadb
 log "Enabling MariaDB to start on boot..."
 sudo systemctl enable mariadb
 
+# Change the root password
+ROOT_PASSWORD="admin123"
+
+log "Setting root password..."
+echo "root:$ROOT_PASSWORD" | sudo chpasswd
+
+log "Root password changed successfully."
+
 # Set root password to automate mysql_secure_installation
 MYSQL_ROOT_PASSWORD="admin123"
 
 log "Running mysql_secure_installation..."
 printf "%s\n" \
-  "Y" \
-  "$MYSQL_ROOT_PASSWORD" \
-  "$MYSQL_ROOT_PASSWORD" \
+  "$ROOT_PASSWORD" \
+  "n" \
+  "n" \
   "Y" \
   "n" \
   "Y" \
