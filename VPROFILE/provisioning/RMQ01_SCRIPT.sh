@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Define log file relative to the script
-LOG_FILE="/vagrant/logs/mc01_log.log"
+LOG_FILE="/vagrant/logs/rmq01_log.log"
 
 # Ensure the Logs directory exists
 mkdir -p "$(dirname "$LOG_FILE")"
@@ -15,10 +15,10 @@ log() {
 # Redirect all output and errors to the log file as well
 exec > >(tee -a "$LOG_FILE") 2>&1
 
-log "==== MC01 Memcached Setup Script Started ===="
-
 log "==== Sets the correct timezone for the VM ===="
 sudo timedatectl set-timezone Africa/Cairo
+
+log "==== RMQ01 RabbitMQ Setup Script Started ===="
 
 # Update system and install required packages
 log "Updating system packages..."
@@ -27,39 +27,48 @@ sudo dnf update -y
 log "Installing EPEL release..."
 sudo dnf install epel-release -y
 
-log "Installing MemCached..."
-sudo dnf install memcached -y
+log "Installing wget..."
+sudo dnf install wget -y
+cd /tmp/
 
-# Start and enable MemCached
-log "Starting memcached service..."
-sudo systemctl start memcached
+log "Installing centos-release-rabbitmq-38..."
+sudo dnf install centos-release-rabbitmq-38 -y
 
-log "Enabling memcached to start on boot..."
-sudo systemctl enable memcached
+log "Enabling CentOS RabbitMQ repository and installing RabbitMQ server..."
+sudo dnf --enablerepo=centos-rabbitmq-38 install rabbitmq-server -y
 
-log "Checks the status of memcached..."
-sudo systemctl enable memcached
+log "Enabling the rabbitMQ service..."
+systemctl enable --now rabbitmq-server
 
-log "Allows other machines to connect to MemCached..."
-sed -i 's/127.0.0.1/0.0.0.0/g' /etc/sysconfig/memcached
+log "Configuring RabbitMQ loopback users..."
+sudo sh -c 'echo "[{rabbit, [{loopback_users, []}]}]." > /etc/rabbitmq/rabbitmq.config'
 
-log "Restarting memcached service..."
-sudo systemctl restart memcached
+log "Adding RabbitMQ user 'test'..."
+sudo rabbitmqctl add_user test test
 
-# Starting the firewall and allowing the mariadb to access from port no. 3306
+log "Setting 'test' user as an administrator..."
+sudo rabbitmqctl set_user_tags test administrator
+
+log "Restarting RabbitMQ service..."
+sudo systemctl restart rabbitmq-server
+
+
+# Starting the firewall and allowing the rabbitmq to access from port no. 5672
 log "Starting and enabling the firewall service..."
 sudo systemctl start firewalld
 sudo systemctl enable firewalld
 
 log "Opening TCP port 11211 in the firewall..."
-sudo firewall-cmd --add-port=11211/tcp
+sudo firewall-cmd --add-port=5672/tcp
 sudo firewall-cmd --runtime-to-permanent
 
-log "Opening UDP port 11111 in the firewall..."
-sudo firewall-cmd --add-port=11111/udp
-sudo firewall-cmd --runtime-to-permanent
+log "Starts RabbitMQ service..."
+sudo systemctl start rabbitmq-server
 
-log "Starting Memcached on port 11211 (TCP) and 11111 (UDP)..."
-sudo memcached -p 11211 -U 11111 -u memcached -d
+log "Enables RabbitMQ service..."
+sudo systemctl enable rabbitmq-server
 
-log "==== MC01 MemCached Setup Script Completed ===="
+log "Checks the status RabbitMQ service..."
+sudo systemctl status rabbitmq-server
+
+log "==== RMQ01 RabbitMQ Setup Script Completed ===="
