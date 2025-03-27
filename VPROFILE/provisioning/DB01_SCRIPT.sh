@@ -14,7 +14,7 @@ log() {
 
 # Redirect all output and errors to the log file as well
 exec > >(tee -a "$LOG_FILE") 2>&1
-mysql
+
 log "==== DB01 Setup Script Started ===="
 
 log "==== Sets the correct timezone for the VM ===="
