@@ -23,6 +23,7 @@ Vagrant.configure("2") do |config|
 
   end
   
+
   ### Memcached VM (mc01) #### 
   config.vm.define "mc01" do |mc01|
     mc01.vm.box = "eurolinux-vagrant/centos-stream-9"
@@ -43,12 +44,16 @@ Vagrant.configure("2") do |config|
   config.vm.define "rmq01" do |rmq01|
     rmq01.vm.box = "eurolinux-vagrant/centos-stream-9"
     rmq01.vm.box_version = "9.0.43"
-    # rmq01.vm.box_version = "0"
     rmq01.vm.hostname = "rmq01"
     rmq01.vm.network "private_network", ip: "192.168.56.13"
+    
     rmq01.vm.provider "virtualbox" do |vb|
       vb.memory = "600"
     end
+    
+    # Run external script on VM for provisioning
+    db01.vm.provision "shell", path: "provisioning/RMQ01_SCRIPT.sh"
+
   end
   
   ### Tomcat Application Server VM (app01) ###

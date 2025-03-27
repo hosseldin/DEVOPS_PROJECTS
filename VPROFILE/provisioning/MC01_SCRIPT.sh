@@ -15,7 +15,7 @@ log() {
 # Redirect all output and errors to the log file as well
 exec > >(tee -a "$LOG_FILE") 2>&1
 
-log "==== MC01 Setup Script Started ===="
+log "==== MC01 Memcached Setup Script Started ===="
 
 log "==== Sets the correct timezone for the VM ===="
 sudo timedatectl set-timezone Africa/Cairo
@@ -40,70 +40,26 @@ sudo systemctl enable memcached
 log "Checks the status of memcached..."
 sudo systemctl enable memcached
 
-# Change the root password
-ROOT_PASSWORD="admin123"
+log "Allows other machines to connect to MemCached..."
+sed -i 's/127.0.0.1/0.0.0.0/g' /etc/sysconfig/memcached
 
-log "Setting root password..."
-echo "root:$ROOT_PASSWORD" | sudo chpasswd
-
-log "Root password changed successfully."
-
-# Set root password to automate mysql_secure_installation
-MYSQL_ROOT_PASSWORD="admin123"
-
-log "Running mysql_secure_installation..."
-printf "%s\n" \
-  "$ROOT_PASSWORD" \
-  "n" \
-  "n" \
-  "Y" \
-  "n" \
-  "Y" \
-  "Y" | sudo mysql_secure_installation
-
-# Run SQL commands from an external file
-log "Running database setup from DB01_SQL.sql..."
-mysql -u root -p"$MYSQL_ROOT_PASSWORD" < /vagrant/provisioning/DB01_SQL.sql
-
-log "Cloning the VProfile project from GitHub"
-git clone -b main https://github.com/hkhcoder/vprofile-project.git
-
-log "Redirecting into the project's directory"
-cd vprofile-project
-
-
-DB_NAME="accounts"
-DB_BACKUP="src/main/resources/db_backup.sql"
-
-# Import database backup
-log "Importing database backup from $DB_BACKUP..."
-mysql -u root -p"$MYSQL_ROOT_PASSWORD" "$DB_NAME" < "$DB_BACKUP"
-
-# Connect to MySQL and show tables
-log "Verifying tables in $DB_NAME..."
-mysql -u root -p"$MYSQL_ROOT_PASSWORD" "$DB_NAME" -e "SHOW TABLES;"
-
-# Restarting MariaDB
-log "Restarting MariaDB service..."
-sudo systemctl restart mariadb
+log "Restarting memcached service..."
+sudo systemctl restart memcached
 
 # Starting the firewall and allowing the mariadb to access from port no. 3306
 log "Starting and enabling the firewall service..."
 sudo systemctl start firewalld
 sudo systemctl enable firewalld
 
-log "Checking active firewall zones..."
-sudo firewall-cmd --get-active-zones
+log "Opening TCP port 11211 in the firewall..."
+sudo firewall-cmd --add-port=11211/tcp
+sudo firewall-cmd --runtime-to-permanent
 
-log "Opening MySQL port 3306..."
-sudo firewall-cmd --zone=public --add-port=3306/tcp --permanent
+log "Opening UDP port 11111 in the firewall..."
+sudo firewall-cmd --add-port=11111/udp
+sudo firewall-cmd --runtime-to-permanent
 
-log "Reloading firewall rules..."
-sudo firewall-cmd --reload
+log "Starting Memcached on port 11211 (TCP) and 11111 (UDP)..."
+sudo memcached -p 11211 -U 11111 -u memcached -d
 
-# Restarting MariaDB
-log "Restarting MariaDB service..."
-sudo systemctl restart mariadb
-
-
-log "==== MYSQL Setup Script Completed ===="
+log "==== MC01 MemCached Setup Script Completed ===="
