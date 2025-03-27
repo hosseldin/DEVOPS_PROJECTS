@@ -59,7 +59,7 @@ Vagrant.configure("2") do |config|
       vb.memory = "750"  # Higher memory allocation for Tomcat
     end
   end
-   
+
   ### Nginx Web Server VM (web01) ###
   config.vm.define "web01" do |web01|
     web01.vm.box = "ubuntu/jammy64"  # Use Ubuntu 22.04 (Jammy Jellyfish)
@@ -68,7 +68,7 @@ Vagrant.configure("2") do |config|
     web01.vm.network "private_network", ip: "192.168.56.11"
     web01.vm.provider "virtualbox" do |vb|
       vb.gui = true  # Enable GUI mode for this VM (useful for debugging UI-related tasks)
-      vb.memory = "800"
+      vb.memory = "850"
     end
   end
 end
