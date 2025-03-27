@@ -4,8 +4,7 @@ Vagrant.configure("2") do |config|
   # Enable Vagrant Hostmanager plugin to automatically manage /etc/hosts entries
   config.hostmanager.enabled = true 
   config.hostmanager.manage_host = true
-  
-  
+    
   ### Database VM (db01) ####
   config.vm.define "db01" do |db01|
     db01.vm.box = "eurolinux-vagrant/centos-stream-9"  # Base image (CentOS Stream 9)
@@ -17,27 +16,10 @@ Vagrant.configure("2") do |config|
     db01.vm.provider "virtualbox" do |vb|
       vb.gui = false    # Run the VM without GUI
       vb.memory = "600"  # Allocate 600MB of RAM
-      vb.customize [
-        "storageattach", :id, 
-        "--storagectl", "IDE Controller",
-        "--port", 1,
-        "--device", 0, 
-        "--type", "dvddrive", 
-        "--medium", "emptydrive"]
     end
-
 
     # Run external script on VM for provisioning
     db01.vm.provision "shell", path: "provisioning/DB01_SCRIPT.sh"
-
-    # db01.vm.synced_folder "logs", "/vagrant/logs", 
-    #   create: true, 
-    #   owner: "vagrant", 
-    #   group: "vagrant", 
-    #   mount_options: [
-    #     "dmode=775", 
-    #     "fmode=664"
-    #   ]
 
   end
   
@@ -90,3 +72,21 @@ Vagrant.configure("2") do |config|
     end
   end
 end
+
+# For the db01
+# vb.customize [
+#   "storageattach", :id, 
+#   "--storagectl", "IDE Controller",
+#   "--port", 1,
+#   "--device", 0, 
+#   "--type", "dvddrive", 
+#   "--medium", "emptydrive"]
+
+# db01.vm.synced_folder "logs", "/vagrant/logs", 
+#   create: true, 
+#   owner: "vagrant", 
+#   group: "vagrant", 
+#   mount_options: [
+#     "dmode=775", 
+#     "fmode=664"
+#   ]
