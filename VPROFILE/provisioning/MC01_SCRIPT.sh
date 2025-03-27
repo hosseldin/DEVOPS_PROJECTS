@@ -15,32 +15,30 @@ log() {
 # Redirect all output and errors to the log file as well
 exec > >(tee -a "$LOG_FILE") 2>&1
 
-log "==== DB01 Setup Script Started ===="
+log "==== MC01 Setup Script Started ===="
 
 log "==== Sets the correct timezone for the VM ===="
 sudo timedatectl set-timezone Africa/Cairo
 
 # Update system and install required packages
 log "Updating system packages..."
-sudo yum update -y
+sudo dnf update -y
 
 log "Installing EPEL release..."
-sudo yum install epel-release -y
+sudo dnf install epel-release -y
 
-# log "Installing packages for shared folders..."
-# sudo yum install kernel-devel kernel-headers gcc make perl dkms  -y
-# sudo mount /dev/sr0 /mnt
-# sudo /mnt/VBoxLinuxAdditions.run
+log "Installing MemCached..."
+sudo dnf install memcached -y
 
-log "Installing Git and MariaDB..."
-sudo yum install git mariadb-server -y
+# Start and enable MemCached
+log "Starting memcached service..."
+sudo systemctl start memcached
 
-# Start and enable MariaDB
-log "Starting MariaDB service..."
-sudo systemctl start mariadb
+log "Enabling memcached to start on boot..."
+sudo systemctl enable memcached
 
-log "Enabling MariaDB to start on boot..."
-sudo systemctl enable mariadb
+log "Checks the status of memcached..."
+sudo systemctl enable memcached
 
 # Change the root password
 ROOT_PASSWORD="admin123"
