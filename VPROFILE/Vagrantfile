@@ -20,7 +20,7 @@ Vagrant.configure("2") do |config|
     end
 
     # Run external script on VM for provisioning
-    db01.vm.provision "shell", path: "provisioning/DB01_SCRIPT.sh"
+    db01.vm.provision "shell", path: "provisioning/db01-script.sh"
 
   end
   
@@ -38,7 +38,7 @@ Vagrant.configure("2") do |config|
     end
 
     # Run external script on VM for provisioning
-    mc01.vm.provision "shell", path: "provisioning/MC01_SCRIPT.sh"
+    mc01.vm.provision "shell", path: "provisioning/mc01-script.sh"
     
   end
   
@@ -55,7 +55,7 @@ Vagrant.configure("2") do |config|
     end
     
     # Run external script on VM for provisioning
-    rmq01.vm.provision "shell", path: "provisioning/RMQ01_SCRIPT.sh"
+    rmq01.vm.provision "shell", path: "provisioning/rmq01-script.sh"
 
   end
   
@@ -71,7 +71,7 @@ Vagrant.configure("2") do |config|
     end
 
     # Run external script on VM for provisioning
-    app01.vm.provision "shell", path: "provisioning/APP01_SCRIPT.sh"
+    app01.vm.provision "shell", path: "provisioning/app01-script.sh"
   
   end
 
@@ -88,7 +88,7 @@ Vagrant.configure("2") do |config|
     end
     
     # Run external script on VM for provisioning
-    web01.vm.provision "shell", path: "provisioning/WEB01_SCRIPT.sh"
+    web01.vm.provision "shell", path: "provisioning/web01-script.sh"
   
   end
 end
