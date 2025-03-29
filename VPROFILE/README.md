@@ -1,65 +1,34 @@
 
 # VPROFILE_PROJECT
 
-=====================================
-=====================================
+<hr>
 
 ## This is the official directory for the VProfile Project
 
-=====================================
-=====================================
-
-## Contributors 👨‍💼
-### [Hossam Mahmoud](hossam.uddin1@gmail.com)
-<br>
+<hr>
 
 ## Brief 📃
-This project implements a database system coded in Bash, powered by Zenity GUI.
-The DBMS provides basic operations like creating, reading, updating, and deleting databases/tables. It is implemented in a very user-friendly way, achieving smooth and instant transitions between menu operations.
+This project provisions a multi-machine environment using Vagrant and VirtualBox.
+It sets up multiple CentOS-based VMs (web, app, db, etc.) with pre-installed software like Nginx, RabbitMQ, and Memcached.
+
+<hr>
 
 ## Features 🌟
-  - Create Database
-  - View Databases
-  - Drop Database
-  - **Connect to Database**
-    - ***Operations:***
-      - Create Table
-      - View Table
-      - Drop Table
-      - Insert Data into Table
-      - Update Data into Table
-      - Delete Data from Table
-  - Error Handling
-<br>
+- Automated provisioning using Vagrant
+- Multi-machine setup: Web, App, DB servers
+- Pre-installed dependencies: RabbitMQ, Memcached, etc.
+- Custom Vagrant base boxes for faster deployment
 
-## Project Structure 🪜
-The project is structured in the following manner:
-
-- **Main Menu APIs**
-  - `mainMenu.sh`
-  - `createDataBase.sh`
-  - `dropDataBase.sh`
-  - `listDataBase.sh`
-  - `connectDatabase.sh`
-  - `connectMenu.sh`
-- **Connect Database Menu APIs**
-  - `createTable.sh`
-  - `deleteFromTable.sh`
-  - `dropTable.sh`
-  - `insertTable.sh`
-  - `listTable.sh`
-  - `pickTable.sh`
-  - `selectFromTable.sh`
-  - `updateTable.sh`
-
-<br>
+<hr>
 
 ## Requirements to Run 📃
-- Bash / Zsh Shell
-- Zenity (to enable the GUI interface)
 - Linux-based operating system
+- Bash / Zsh Shell
+- VirtualBox
+- Vagrant
+- Git
 
-<br>
+<hr>
 
 ## Usage 🪧
 ## Prerequisites
@@ -111,6 +80,10 @@ Feel free to reach out if you encounter any issues or have suggestions.
 - [Abdelrahman Khaled](Abdelrahmankhalid27@gmail.com) ✉️
 - [Zeyad Tarek](ziadtarekmohamed32@gmail.com) ✉️
 
+## Contributors 👨‍💼
+### [Hossam Mahmoud](hossam.uddin1@gmail.com)
+
+<hr>
 
 =====================================
 =====================================
