@@ -15,7 +15,7 @@ log() {
 # Redirect all output and errors to the log file as well
 exec > >(tee -a "$LOG_FILE") 2>&1
 
-log "==== Sets the correct timezone for the VM ===="
+log "==== Sets the correct timeuzone for the VM ===="
 sudo timedatectl set-timezone Africa/Cairo
 
 log "==== RMQ01 RabbitMQ Setup Script Started ===="
