@@ -52,6 +52,54 @@ tar xzvf apache-tomcat-9.0.75.tar.gz
 log "Adds tomcat user"
 useradd --home-dir /usr/local/tomcat --shell /sbin/nologin tomcat
 
+log "Copies data to tomcat home dir"
+cp -r /tmp/apache-tomcat-9.0.75/* /usr/local/tomcat/
+
+log "Make tomcat user owner of tomcat home dir"
+chown -R tomcat.tomcat /usr/local/tomcat
+
+log "Creating a tomcat service..."
+log "Create a tomcat service file..."
+sudo tee /etc/systemd/system/tomcat.service <<EOF > /dev/null
+[Unit]
+Description=Tomcat
+After=network.target
+
+[Service]
+User=tomcat
+WorkingDirectory=/usr/local/tomcat
+Environment=JRE_HOME=/usr/lib/jvm/jre
+Environment=JAVA_HOME=/usr/lib/jvm/jre
+Environment=CATALINA_HOME=/usr/local/tomcat
+Environment=CATALINE_BASE=/usr/local/tomcat
+ExecStart=/usr/local/tomcat/bin/catalina.sh run
+ExecStop=/usr/local/tomcat/bin/shutdown.sh
+SyslogIdentifier=tomcat-%i
+
+[Install]
+WantedBy=multi-user.target
+EOF
+
+log "Reload the systemd files"
+systemctl daemon-reload
+
+log "Enable the tomcat service..."
+systemctl start tomcat
+systemctl enable tomcat
+
+Enabling the firewall and allowing port 8080 to access the tomcat
+systemctl start firewalld
+systemctl enable firewalld
+firewall-cmd --get-active-zones
+firewall-cmd --zone=public --add-port=8080/tcp --permanent
+firewall-cmd --reload
+
+
+
+
+
+
+
 log "Enabling CentOS RabbitMQ repository and installing RabbitMQ server..."
 sudo dnf --enablerepo=centos-rabbitmq-38 install rabbitmq-server -y
 
