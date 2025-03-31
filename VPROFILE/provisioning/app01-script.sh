@@ -34,12 +34,23 @@ sudo dnf update -y
 log "Installing EPEL release..."
 sudo dnf install epel-release -y
 
-log "Installing wget..."
-sudo dnf install wget -y
+log "Installing java 11"
+sudo dnf install java-11-openjdk java-11-openjdk-devel -y
+
+log "Installing some dependencies"
+sudo dnf install git maven wget -y
+
+log "changing the dir to /tmp"
 cd /tmp/
 
-log "Installing centos-release-rabbitmq-38..."
-sudo dnf install centos-release-rabbitmq-38 -y
+log "Downloads the Tomcat Package"
+wget https://archive.apache.org/dist/tomcat/tomcat-9/v9.0.75/bin/apache-tomcat-9.0.75.tar.gz
+
+log "Extracts the Tomcat Package"
+tar xzvf apache-tomcat-9.0.75.tar.gz
+
+log "Adds tomcat user"
+useradd --home-dir /usr/local/tomcat --shell /sbin/nologin tomcat
 
 log "Enabling CentOS RabbitMQ repository and installing RabbitMQ server..."
 sudo dnf --enablerepo=centos-rabbitmq-38 install rabbitmq-server -y
