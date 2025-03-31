@@ -8,7 +8,7 @@ echo "Setup complete!" > /home/vagrant/setup_done.txt
 #!/bin/bash
 
 # Define log file relative to the script
-LOG_FILE="/vagrant/logs/rmq01_log.log"
+LOG_FILE="/vagrant/logs/app01_log.log"
 
 # Ensure the Logs directory exists
 mkdir -p "$(dirname "$LOG_FILE")"
@@ -22,7 +22,7 @@ log() {
 # Redirect all output and errors to the log file as well
 exec > >(tee -a "$LOG_FILE") 2>&1
 
-log "==== Sets the correct timeuzone for the VM ===="
+log "==== Sets the correct timezone for the VM ===="
 sudo timedatectl set-timezone Africa/Cairo
 
 log "==== RMQ01 RabbitMQ Setup Script Started ===="
