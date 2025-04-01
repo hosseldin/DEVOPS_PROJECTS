@@ -25,7 +25,7 @@ exec > >(tee -a "$LOG_FILE") 2>&1
 log "==== Sets the correct timezone for the VM ===="
 sudo timedatectl set-timezone Africa/Cairo
 
-log "==== RMQ01 RabbitMQ Setup Script Started ===="
+log "==== APP01 TomCat Setup Script Started ===="
 
 # Update system and install required packages
 log "Updating system packages..."
@@ -87,54 +87,50 @@ log "Enable the tomcat service..."
 systemctl start tomcat
 systemctl enable tomcat
 
-Enabling the firewall and allowing port 8080 to access the tomcat
+log "Starting and enabling the firewall"
 systemctl start firewalld
 systemctl enable firewalld
+
+log "allowing port 8080 to access the tomcat"
 firewall-cmd --get-active-zones
 firewall-cmd --zone=public --add-port=8080/tcp --permanent
 firewall-cmd --reload
 
 
+log "Download the webapp itself"
+git clone -b main https://github.com/hkhcoder/vprofile-project.git
+
+log "Build the code inside the repo"
+cd vprofile-project
+# vim src/main/resources/application.properties
+# What should i insert in the properties file?
+
+log "Maven compiles, test, packages and install the Java source code"
+mvn install
+log "App installed successfully."
+
+log "Stops tomcat service momentarily"
+systemctl stop tomcat
+
+log "Removing existing ROOT application..."
+rm -rf /usr/local/tomcat/webapps/ROOT*
+log "Existing ROOT application removed successfully."
+
+log "Copying new WAR file to Tomcat webapps directory..."
+cp target/vprofile-v2.war /usr/local/tomcat/webapps/ROOT.war
+log "WAR file copied successfully."
+
+log "Starting Tomcat service..."
+systemctl start tomcat
+log "Tomcat service started successfully."
+
+log "Changing ownership of Tomcat webapps directory..."
+chown tomcat.tomcat /usr/local/tomcat/webapps -R
+log "Ownership changed successfully."
+
+log "Restarting Tomcat service..."
+systemctl restart tomcat
+log "Tomcat service restarted successfully."
 
 
-
-
-
-log "Enabling CentOS RabbitMQ repository and installing RabbitMQ server..."
-sudo dnf --enablerepo=centos-rabbitmq-38 install rabbitmq-server -y
-
-log "Enabling the rabbitMQ service..."
-systemctl enable --now rabbitmq-server
-
-log "Configuring RabbitMQ loopback users..."
-sudo sh -c 'echo "[{rabbit, [{loopback_users, []}]}]." > /etc/rabbitmq/rabbitmq.config'
-
-log "Adding RabbitMQ user 'test'..."
-sudo rabbitmqctl add_user test test
-
-log "Setting 'test' user as an administrator..."
-sudo rabbitmqctl set_user_tags test administrator
-
-log "Restarting RabbitMQ service..."
-sudo systemctl restart rabbitmq-server
-
-
-# Starting the firewall and allowing the rabbitmq to access from port no. 5672
-log "Starting and enabling the firewall service..."
-sudo systemctl start firewalld
-sudo systemctl enable firewalld
-
-log "Opening TCP port 11211 in the firewall..."
-sudo firewall-cmd --add-port=5672/tcp
-sudo firewall-cmd --runtime-to-permanent
-
-log "Starts RabbitMQ service..."
-sudo systemctl start rabbitmq-server
-
-log "Enables RabbitMQ service..."
-sudo systemctl enable rabbitmq-server
-
-log "Checks the status RabbitMQ service..."
-sudo systemctl status rabbitmq-server
-
-log "==== RMQ01 RabbitMQ Setup Script Completed ===="
+log "==== APP01 Tomcat Setup Script Completed ===="
