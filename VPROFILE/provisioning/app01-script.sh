@@ -1,11 +1,4 @@
 #!/bin/bash
-echo "Running setup script..."
-sudo apt update -y
-sudo apt install -y nginx
-echo "Setup complete!" > /home/vagrant/setup_done.txt
-
-
-#!/bin/bash
 
 # Define log file relative to the script
 LOG_FILE="/vagrant/logs/app01_log.log"
