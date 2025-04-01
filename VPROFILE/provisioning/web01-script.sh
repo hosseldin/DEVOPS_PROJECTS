@@ -1,14 +1,7 @@
 #!/bin/bash
-echo "Running setup script..."
-sudo apt update -y
-sudo apt install -y nginx
-echo "Setup complete!" > /home/vagrant/setup_done.txt
-
-
-#!/bin/bash
 
 # Define log file relative to the script
-LOG_FILE="/vagrant/logs/app01_log.log"
+LOG_FILE="/vagrant/logs/web01_log.log"
 
 # Ensure the Logs directory exists
 mkdir -p "$(dirname "$LOG_FILE")"
@@ -27,7 +20,9 @@ sudo timedatectl set-timezone Africa/Cairo
 
 log "==== APP01 TomCat Setup Script Started ===="
 
-# Update system and install required packages
+log "Open a root interactive shell..."
+sudo -i
+
 log "Updating system packages..."
 sudo dnf update -y
 

@@ -22,16 +22,16 @@ log "==== APP01 TomCat Setup Script Started ===="
 
 # Update system and install required packages
 log "Updating system packages..."
-sudo dnf update -y
+sudo apt update -y
 
 log "Installing EPEL release..."
-sudo dnf install epel-release -y
+sudo apt install epel-release -y
 
 log "Installing java 11"
-sudo dnf install java-11-openjdk java-11-openjdk-devel -y
+sudo apt install java-11-openjdk java-11-openjdk-devel -y
 
 log "Installing some dependencies"
-sudo dnf install git maven wget -y
+sudo apt install git maven wget -y
 
 log "changing the dir to /tmp"
 cd /tmp/
