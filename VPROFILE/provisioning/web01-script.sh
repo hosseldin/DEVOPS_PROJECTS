@@ -18,114 +18,41 @@ exec > >(tee -a "$LOG_FILE") 2>&1
 log "==== Sets the correct timezone for the VM ===="
 sudo timedatectl set-timezone Africa/Cairo
 
-log "==== APP01 TomCat Setup Script Started ===="
+log "==== WEB01 NGINX Setup Script Started ===="
 
 log "Open a root interactive shell..."
 sudo -i
 
 log "Updating system packages..."
-sudo dnf update -y
+sudo apt update -y
 
 log "Installing EPEL release..."
-sudo dnf install epel-release -y
+sudo apt install epel-release -y
 
-log "Installing java 11"
-sudo dnf install java-11-openjdk java-11-openjdk-devel -y
+log "Installing Nginx"
+sudo apt install nginx -y
 
-log "Installing some dependencies"
-sudo dnf install git maven wget -y
-
-log "changing the dir to /tmp"
-cd /tmp/
-
-log "Downloads the Tomcat Package"
-wget https://archive.apache.org/dist/tomcat/tomcat-9/v9.0.75/bin/apache-tomcat-9.0.75.tar.gz
-
-log "Extracts the Tomcat Package"
-tar xzvf apache-tomcat-9.0.75.tar.gz
-
-log "Adds tomcat user"
-useradd --home-dir /usr/local/tomcat --shell /sbin/nologin tomcat
-
-log "Copies data to tomcat home dir"
-cp -r /tmp/apache-tomcat-9.0.75/* /usr/local/tomcat/
-
-log "Make tomcat user owner of tomcat home dir"
-chown -R tomcat.tomcat /usr/local/tomcat
-
-log "Creating a tomcat service..."
-log "Create a tomcat service file..."
-sudo tee /etc/systemd/system/tomcat.service <<EOF > /dev/null
-[Unit]
-Description=Tomcat
-After=network.target
-
-[Service]
-User=tomcat
-WorkingDirectory=/usr/local/tomcat
-Environment=JRE_HOME=/usr/lib/jvm/jre
-Environment=JAVA_HOME=/usr/lib/jvm/jre
-Environment=CATALINA_HOME=/usr/local/tomcat
-Environment=CATALINE_BASE=/usr/local/tomcat
-ExecStart=/usr/local/tomcat/bin/catalina.sh run
-ExecStop=/usr/local/tomcat/bin/shutdown.sh
-SyslogIdentifier=tomcat-%i
-
-[Install]
-WantedBy=multi-user.target
+log "Creating an Nginx conf file"
+sudo tee /etc/nginx/sites-available/vproapp <<EOF > /dev/null
+upstream vproapp {
+    server app01:8080;
+}
+server {
+    listen 80;
+    location / {
+        proxy_pass http://vproapp;
+    }
+}
 EOF
 
-log "Reload the systemd files"
-systemctl daemon-reload
+log "Removing default Nginx config"
+rm -rf /etc/nginx/sites-enabled/default
 
-log "Enable the tomcat service..."
-systemctl start tomcat
-systemctl enable tomcat
+log "Creating symlink for vproapp configuration"
+ln -s /etc/nginx/sites-available/vproapp /etc/nginx/sites-enabled/vproapp
 
-log "Starting and enabling the firewall"
-systemctl start firewalld
-systemctl enable firewalld
-
-log "allowing port 8080 to access the tomcat"
-firewall-cmd --get-active-zones
-firewall-cmd --zone=public --add-port=8080/tcp --permanent
-firewall-cmd --reload
+log "Restarting Nginx"
+systemctl restart nginx
 
 
-log "Download the webapp itself"
-git clone -b main https://github.com/hkhcoder/vprofile-project.git
-
-log "Build the code inside the repo"
-cd vprofile-project
-# vim src/main/resources/application.properties
-# What should i insert in the properties file?
-
-log "Maven compiles, test, packages and install the Java source code"
-mvn install
-log "App installed successfully."
-
-log "Stops tomcat service momentarily"
-systemctl stop tomcat
-
-log "Removing existing ROOT application..."
-rm -rf /usr/local/tomcat/webapps/ROOT*
-log "Existing ROOT application removed successfully."
-
-log "Copying new WAR file to Tomcat webapps directory..."
-cp target/vprofile-v2.war /usr/local/tomcat/webapps/ROOT.war
-log "WAR file copied successfully."
-
-log "Starting Tomcat service..."
-systemctl start tomcat
-log "Tomcat service started successfully."
-
-log "Changing ownership of Tomcat webapps directory..."
-chown tomcat.tomcat /usr/local/tomcat/webapps -R
-log "Ownership changed successfully."
-
-log "Restarting Tomcat service..."
-systemctl restart tomcat
-log "Tomcat service restarted successfully."
-
-
-log "==== APP01 Tomcat Setup Script Completed ===="
+log "==== WEB01 NGINX Setup Script Completed ===="
