@@ -46,7 +46,7 @@ log "Extracts the Tomcat Package"
 tar xzvf apache-tomcat-9.0.75.tar.gz
 
 log "Adds tomcat user"
-useradd --home-dir /usr/local/tomcat --shell /sbin/nologin tomcat
+useradd -m --home-dir /usr/local/tomcat --shell /sbin/nologin tomcat
 
 log "Copies data to tomcat home dir"
 cp -r /tmp/apache-tomcat-9.0.75/* /usr/local/tomcat/
