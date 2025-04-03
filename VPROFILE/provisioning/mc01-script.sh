@@ -22,7 +22,7 @@ sudo timedatectl set-timezone Africa/Cairo
 
 # Update system and install required packages
 log "Updating system packages..."
-sudo dnf update -y
+# sudo dnf update -y
 
 log "Installing EPEL release..."
 sudo dnf install epel-release -y
