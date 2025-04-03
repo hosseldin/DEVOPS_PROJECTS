@@ -72,3 +72,7 @@ log "Checks the status RabbitMQ service..."
 sudo systemctl status rabbitmq-server
 
 log "==== RMQ01 RabbitMQ Setup Script Completed ===="
+log "=========================================="
+log "=========================================="
+log "=========================================="
+log "=========================================="

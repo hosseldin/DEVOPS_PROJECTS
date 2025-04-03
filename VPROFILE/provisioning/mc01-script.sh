@@ -63,3 +63,7 @@ log "Starting Memcached on port 11211 (TCP) and 11111 (UDP)..."
 sudo memcached -p 11211 -U 11111 -u memcached -d
 
 log "==== MC01 MemCached Setup Script Completed ===="
+log "=========================================="
+log "=========================================="
+log "=========================================="
+log "=========================================="
