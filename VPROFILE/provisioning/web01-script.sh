@@ -51,6 +51,9 @@ rm -rf /etc/nginx/sites-enabled/default
 log "Creating symlink for vproapp configuration"
 ln -s /etc/nginx/sites-available/vproapp /etc/nginx/sites-enabled/vproapp
 
+log "Verify the symlink"
+ls -l /etc/nginx/sites-enabled/vproapp
+
 log "Restarting Nginx"
 systemctl restart nginx
 
