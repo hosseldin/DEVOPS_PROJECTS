@@ -22,7 +22,7 @@ sudo timedatectl set-timezone Africa/Cairo
 
 # Update system and install required packages
 log "Updating system packages..."
-sudo yum update -y
+# sudo yum update -y
 
 log "Installing EPEL release..."
 sudo yum install epel-release -y
