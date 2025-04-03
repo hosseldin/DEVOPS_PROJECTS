@@ -103,30 +103,24 @@ cd vprofile-project
 
 log "Maven compiles, test, packages and install the Java source code"
 mvn install
-log "App installed successfully."
 
 log "Stops tomcat service momentarily"
 systemctl stop tomcat
 
 log "Removing existing ROOT application..."
 rm -rf /usr/local/tomcat/webapps/ROOT*
-log "Existing ROOT application removed successfully."
 
 log "Copying new WAR file to Tomcat webapps directory..."
 cp target/vprofile-v2.war /usr/local/tomcat/webapps/ROOT.war
-log "WAR file copied successfully."
 
 log "Starting Tomcat service..."
 systemctl start tomcat
-log "Tomcat service started successfully."
 
 log "Changing ownership of Tomcat webapps directory..."
 chown tomcat.tomcat /usr/local/tomcat/webapps -R
-log "Ownership changed successfully."
 
 log "Restarting Tomcat service..."
 systemctl restart tomcat
-log "Tomcat service restarted successfully."
 
 
 log "==== APP01 Tomcat Setup Script Completed ===="
