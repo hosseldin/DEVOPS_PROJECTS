@@ -24,7 +24,7 @@ log "Open a root interactive shell..."
 sudo -i
 
 log "Updating system packages..."
-# sudo apt update -y
+sudo apt update -y
 
 log "Installing EPEL release..."
 sudo apt install epel-release -y
