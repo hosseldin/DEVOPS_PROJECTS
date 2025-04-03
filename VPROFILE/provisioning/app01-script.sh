@@ -33,6 +33,9 @@ sudo apt install java-11-openjdk java-11-openjdk-devel -y
 log "Installing some dependencies"
 sudo apt install git maven wget firewalld -y
 
+log "Checking the version of maven"
+mvn -version
+
 log "changing the dir to /tmp"
 cd /tmp/
 
