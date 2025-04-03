@@ -20,7 +20,6 @@ sudo timedatectl set-timezone Africa/Cairo
 
 log "==== APP01 TomCat Setup Script Started ===="
 
-# Update system and install required packages
 log "Updating system packages..."
 sudo apt update -y
 
