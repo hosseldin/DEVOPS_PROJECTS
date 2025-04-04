@@ -64,8 +64,8 @@ printf "%s\n" \
   "Y" | sudo mysql_secure_installation
 
 # Run SQL commands from an external file
-log "Running database setup from DB01_SQL.sql..."
-mysql -u root -p"$MYSQL_ROOT_PASSWORD" < /vagrant/provisioning/DB01_SQL.sql
+log "Running database setup from db01-sql.sql..."
+mysql -u root -p"$MYSQL_ROOT_PASSWORD" < /vagrant/provisioning/db01-sql.sql
 
 log "Cloning the VProfile project from GitHub"
 git clone -b main https://github.com/hkhcoder/vprofile-project.git
