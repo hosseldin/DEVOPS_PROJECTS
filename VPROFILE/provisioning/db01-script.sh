@@ -1,5 +1,7 @@
 #!/bin/bash
 
+echo "Running as: $(whoami)"
+
 # Define log file relative to the script
 LOG_FILE="/vagrant/logs/db01_log.log"
 
