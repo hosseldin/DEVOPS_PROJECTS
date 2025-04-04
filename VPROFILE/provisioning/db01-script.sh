@@ -7,8 +7,8 @@ LOG_FILE="/vagrant/logs/db01_log.log"
 
 # Ensure the Logs directory exists
 mkdir -p "$(dirname "$LOG_FILE")"
-touch "$LOG_FILE"
-chown vagrant:vagrant "$LOG_FILE"
+# touch "$LOG_FILE"
+# chown vagrant:vagrant "$LOG_FILE"
 
 # Function for logging messages with timestamp
 log() {
@@ -17,8 +17,8 @@ log() {
 }
 
 # Redirect all output and errors to the log file as well
-# exec > >(tee -a "$LOG_FILE") 2>&1
-exec > >(sudo -u vagrant tee -a "$LOG_FILE") 2>&1
+exec > >(tee -a "$LOG_FILE") 2>&1
+# exec > >(sudo -u vagrant tee -a "$LOG_FILE") 2>&1
 
 
 log "==== DB01 Setup Script Started ===="
