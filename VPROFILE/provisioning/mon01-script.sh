@@ -20,17 +20,56 @@ sudo timedatectl set-timezone Africa/Cairo
 
 log "==== MON01 Nagios Monitoring Setup Script Started ===="
 
-log "Open a root interactive shell..."
-sudo -i
-
-log "Updating system packages..."
-sudo apt update -y
+# log "Updating system packages..."
+# sudo apt update -y
 
 log "Installing EPEL release..."
 sudo apt install epel-release -y
 
-log "Installing Nginx"
-sudo apt install nginx -y
+log "Installing important needed packages"
+sudo apt install wget unzip curl openssl build-essential libgd-dev libssl-dev libapache2-mod-php php-gd php apache2 -y
+
+
+cd
+
+
+mkdir -p nagios-core
+
+
+cd nagios-core
+
+
+wget -O nagioscore.tar.gz https://github.com/NagiosEnterprises/nagioscore/releases/download/nagios-4.5.9/nagios-4.5.9.tar.gz
+
+
+tar -xvf nagioscore.tar.gz
+
+ls
+
+
+cd nagioscore-nagios-4.5.9/
+
+
+sudo ./configure --with-httpd-conf=/etc/apache2/sites-enabled
+
+sudo make all
+
+sudo make install-group-users
+
+sudo usermod -a -G nagios www-data
+
+log "Installing Nagios Core, Plugins, and NRPE..."
+sudo apt install nagios4 nagios-plugins nagios-nrpe-plugin apache2-utils -y
+
+
+log "Setting up Nagios Admin user..."
+sudo htpasswd -cb /etc/nagios4/htpasswd.users nagiosadmin vagrant
+
+log "Restarting Nagios and Apache..."
+sudo systemctl restart nagios
+sudo systemctl restart apache2
+
+
 
 log "Creating an Nginx conf file"
 sudo tee /etc/nginx/sites-available/vproapp <<EOF > /dev/null
