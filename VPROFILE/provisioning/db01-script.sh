@@ -22,10 +22,10 @@ sudo timedatectl set-timezone Africa/Cairo
 
 # Update system and install required packages
 log "Updating system packages..."
-# sudo yum update -y
+sudo dnf update -y
 
 log "Installing EPEL release..."
-sudo yum install epel-release -y
+sudo dnf install epel-release -y
 
 # log "Installing packages for shared folders..."
 # sudo yum install kernel-devel kernel-headers gcc make perl dkms  -y
@@ -33,7 +33,7 @@ sudo yum install epel-release -y
 # sudo /mnt/VBoxLinuxAdditions.run
 
 log "Installing Git and MariaDB..."
-sudo yum install git mariadb-server -y
+sudo dnf install git mariadb-server -y
 
 # Start and enable MariaDB
 log "Starting MariaDB service..."
