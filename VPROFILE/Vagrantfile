@@ -101,6 +101,23 @@ Vagrant.configure("2") do |config|
     web01.vm.provision "shell", path: "provisioning/web01-script.sh"
   
   end
+
+  ### Nagios Monitoring Server VM (mon01) ###
+  config.vm.define "mon01" do |mon01|
+    web01.vm.box = "ubuntu/jammy64"  # Use Ubuntu 22.04 (Jammy Jellyfish)
+    # web01.vm.box = "ubuntu_24.04_hosa"  # Use Ubuntu 22.04 (Jammy Jellyfish)
+    web01.vm.hostname = "mon01"
+    web01.vm.network "private_network", ip: "192.168.56.10"
+    
+    web01.vm.provider "virtualbox" do |vb|
+      vb.gui = true  # Enable GUI mode for this VM (useful for debugging UI-related tasks)
+      vb.memory = "850"
+    end
+    
+    # Run external script on VM for provisioning
+    web01.vm.provision "shell", path: "provisioning/mon01-script.sh"
+  
+  end
 end
 
 
