@@ -27,7 +27,7 @@ log "==== Sets the correct timezone for the VM ===="
 sudo timedatectl set-timezone Africa/Cairo
 
 # Update system and install required packages
-log "Updating system packages..."
+# log "Updating system packages..."
 # sudo dnf update -y
 
 log "Installing EPEL release..."
